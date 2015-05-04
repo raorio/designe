@@ -82,6 +82,106 @@ refer
 
 
 ================================================================================
+Visual C++
+
+========================================
+version
+
+Visual C++2005(x86/x64)
+	対応オペレーティングシステム
+		Windows Vista SP2(または、それ以降のバージョンも)
+		Windows 7 RTM(または、それ以前のバージョンも)
+		Windows 8
+		Windows 8.1
+		Windows Sever 2003 R2 RTM(または、それ以降のバージョンも)
+		Windows Sever 2003 R2 SP2(または、それ以降のバージョンも)
+		Windows Sever 2008 R2 SP1(または、それ以降のバージョンも)
+		Windows Sever 2008 R2 SP2(または、それ以降のバージョンも)
+		Windows Sever 2012
+		Windows Sever 2012 R2
+Visual C++2005 SP1(x86/x64)
+	対応オペレーティングシステム
+		「Visual C++2005(x86/x64)」と同じ
+Visual C++2008(x86/x64)
+	対応オペレーティングシステム
+		「Visual C++2005(x86/x64)」と同じ
+Visual C++2008 SP1(x86/x64)
+	対応オペレーティングシステム
+		「Visual C++2005(x86/x64)」と同じ
+Visual C++2010(x86/x64)
+	対応オペレーティングシステム
+		「Visual C++2005(x86/x64)」と同じ
+Visual C++2010 SP1(x86/x64)
+	対応オペレーティングシステム
+		「Visual C++2005(x86/x64)」と同じ
+Visual C++2012 Update4(x86/x64)
+	対応オペレーティングシステム
+		Windows Vista SP2(または、それ以降のバージョンも)
+		Windows 7 SP1(または、それ以前のバージョンも)
+		Windows 8
+		Windows 8.1
+		Windows Sever 2003 R2 RTM(または、それ以降のバージョンも)
+		Windows Sever 2003 R2 SP2(または、それ以降のバージョンも)
+		Windows Sever 2008 R2 SP1(または、それ以降のバージョンも)
+		Windows Sever 2008 R2 SP2(または、それ以降のバージョンも)
+		Windows Sever 2012
+		Windows Sever 2012 R2
+Visual C++2013(x86/x64)
+	対応オペレーティングシステム
+		「Visual C++2012(x86/x64)」と同じ?
+		Windows Vista SP2(または、それ以降のバージョンも)
+		Windows 7 SP1(または、それ以前のバージョンも)
+		Windows 8
+		Windows 8.1
+		Windows Sever 2003 R2 RTM(または、それ以降のバージョンも)
+		Windows Sever 2003 R2 SP2(または、それ以降のバージョンも)
+		Windows Sever 2008 R2 SP1(または、それ以降のバージョンも)
+		Windows Sever 2008 R2 SP2(または、それ以降のバージョンも)
+		Windows Sever 2012
+		Windows Sever 2012 R2
+
+refer
+	Visual C++
+		http://ja.wikipedia.org/wiki/Microsoft_Visual_C%2B%2B
+	Visual C++ ランタイムのバージョンとサポートされる OS について
+		http://blogs.msdn.com/b/jpvsblog/archive/2012/06/04/visual-c-os.aspx
+	Visual C++ 2008 再頒布可能パッケージのダウンロードリンク一覧
+		http://astra.digi2.jp/a/e/list-of-vc2008-redist-package.html
+
+
+========================================
+runtime
+
+ランタイムライブラリをインストールの必要性
+	MFC を使わない場合
+		「マルチスレッド (/MT)」
+			不要(exeに含まれるようになる)
+		「マルチスレッド DLL (/MD)」
+			必要
+	MFC を使う場合
+		以下設定と「MFCを使わない場合」の設定を行うと不要(exeに含まれるようになる)になる。
+		プロジェクトのプロパティ → 構成プロパティ → 全般 → MFCの使用を「スタティック ライブラリで MFC を使用する」
+	.NET Framework を使う場合
+		.NET Framework が必要
+
+refer
+	Visual Studioで作成したアプリケーションは
+		http://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q10111420165
+	分離アプリケーションとSide-by-Sideアセンブリ
+		http://ja.wikipedia.org/wiki/%E5%88%86%E9%9B%A2%E3%82%A2%E3%83%97%E3%83%AA%E3%82%B1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E3%81%A8Side-by-Side%E3%82%A2%E3%82%BB%E3%83%B3%E3%83%96%E3%83%AA
+
+
+========================================
+memory leak
+
+	
+
+refer
+	レギュラー DLL の正常に見えるコードから メモリ リークを見つける方法
+		https://msdn.microsoft.com/ja-jp/library/w6kc8ba3(v=vs.100).aspx
+		https://msdn.microsoft.com/ja-jp/library/w6kc8ba3.aspx
+
+================================================================================
 .Net Framework
 
 .NET Framework 1.0
@@ -222,6 +322,8 @@ VC++版等
 		GAC登録対象のDLLが、コードがないサードバーティDLLを使っている場合、不可能。
 
 refer
+	Windows が使用する DLL 検索パス
+		https://msdn.microsoft.com/ja-jp/library/7d83bc18.aspx
 	DLLの配置場所を変更する(probing, codebase, developmentMode)Comments
 		http://d.hatena.ne.jp/tekk/20110403/1301829578
 	グローバルアセンブリキャッシュ
