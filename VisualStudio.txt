@@ -1,0 +1,228 @@
+================================================================================
+Visual Studio
+
+3 バージョン
+3.1 Visual Studio 97
+3.2 Visual Studio 6.0
+	Visual Basic 5.0
+	Visual C++ 5.0
+	Visual J++ 1.1
+	Visual FoxPro 5.0
+	Visual InterDev
+	MSDN ライブラリ
+3.3 Visual Studio .NET (2002)
+	.NET Framework 1.0
+	C#
+	Visual J++ -> Visual J#
+	Visual Basic -> Visual Basic .NET
+3.4 Visual Studio .NET 2003
+	NET Framework 1.1
+3.5 Visual Studio 2005
+	.NET Framework 2.0
+	対応オペレーティングシステム
+		Windows XP
+		Windows Vista
+		Windows 7
+		Windows Server 2003
+		Windows Server 2008
+		Windows Server 2008 R2
+3.6 Visual Studio 2008
+	(.NET Framework 2.0)
+	.NET Framework 3.0
+	.NET Framework 3.5
+	対応オペレーティングシステム
+		Windows XP
+		Windows Vista
+		Windows 7
+		Windows Server 2003
+		Windows Server 2008
+		Windows Server 2008 R2
+3.7 Visual Studio 2010
+	(.NET Framework 2.0)
+	(.NET Framework 3.0)
+	(.NET Framework 3.5)
+	.NET Framework 4.0
+	F#
+	対応オペレーティングシステム
+		Windows XP
+		Windows Vista
+		Windows 7
+		Windows 8
+		Windows 8.1
+		Windows Server 2003
+		Windows Server 2008
+		Windows Server 2008 R2
+		Windows Server 2012
+		Windows Server 2012 R2
+3.8 Visual Studio 2012
+	.NET Framework 4.5
+	対応オペレーティングシステム
+		Windows 7
+		Windows 8
+		Windows 8.1
+		Windows Server 2008 R2
+		Windows Server 2012
+		Windows Server 2012 R2
+3.9 Visual Studio 2013
+	.NET Framework 4.5.1
+	対応オペレーティングシステム
+		Windows 7
+		Windows 8
+		Windows 8.1
+		Windows Server 2008 R2
+		Windows Server 2012
+		Windows Server 2012 R2
+
+
+refer
+	Microsoft Visual Studio
+		http://ja.wikipedia.org/wiki/Microsoft_Visual_Studio#Visual_Studio_97
+	Visual Studio 開発ツール対応 OS 一覧
+		https://www.microsoft.com/ja-jp/dev/support/tools.aspx
+
+
+================================================================================
+.Net Framework
+
+.NET Framework 1.0
+	対応オペレーティングシステム
+		Windows 98
+		Windows NT 4.0
+		Windows 2000
+		Windows XP
+		Windows Server 2003
+		Windows Server 2003 R2
+.NET Framework 1.1
+	対応オペレーティングシステム
+		Windows 2000
+		Windows XP
+		Windows Vista
+		Windows Server 2003
+		Windows Server 2003 R2
+		Windows Server 2008
+.NET Framework 2.0
+	対応オペレーティングシステム
+		Windows 2000
+		Windows XP
+		Windows Vista
+		Windows 7
+		Windows 8
+		Windows Server 2003
+		Windows Server 2003 R2
+		Windows Server 2008
+		Windows Server 2008 R2
+		Windows Server 2012
+.NET Framework 3.0
+	対応オペレーティングシステム
+		Windows XP
+		Windows Vista
+		Windows 7
+		Windows 8
+		Windows Server 2003
+		Windows Server 2003 R2
+		Windows Server 2008
+		Windows Server 2008 R2
+		Windows Server 2012
+	CLR
+		クラスライブラリやCLRなどの基盤は.NET Framework 2.0から変更されていない
+.NET Framework 3.5
+	CLR
+		クラスライブラリやCLRなどの基盤は.NET Framework 2.0から変更されていない
+	対応オペレーティングシステム
+		Windows XP
+		Windows Vista
+		Windows 7
+		Windows 8
+		Windows Server 2003
+		Windows Server 2003 R2
+		Windows Server 2008
+		Windows Server 2008 R2
+		Windows Server 2012
+.NET Framework 4.0
+	CLR
+		バージョンは4
+	対応オペレーティングシステム
+		Windows XP
+		Windows Vista
+		Windows 7
+		Windows Server 2003
+		Windows Server 2003 R2
+		Windows Server 2008
+		Windows Server 2008 R2
+.NET Framework 4.5
+	CLR
+		バージョンは4.5
+	.NET 4とは共存できないが、.NET 4.5は .NET 4とほぼ完全な互換性がある
+	マインバーバージョン
+		4.5.1 及び 4.5.2 が存在
+	対応オペレーティングシステム
+		Windows Vista
+		Windows 7
+		Windows 8
+		Windows Server 2008
+		Windows Server 2008 R2
+		Windows Server 2012
+
+
+.NET Frameworkのインストール
+	.NETアプリケーションが依存する.NET Frameworkのバージョンに従ってインストールが必要
+	1 つのシステムに複数のバージョンの.NET Framework が共存できる。
+	以下の4タイプに分かれる
+		1.0
+		1.1
+		2.0／3.0／3.5
+			2.0と3.0、3.5は内包関係にある。
+			3.5をインストールしておけばよい。
+		4／4.5.x（4.5／4.5.1／4.5.2）
+			4と4.5は共存できない。
+			4.5は、4と互換性がある。
+			4.5をインストールしておけばよい。ただし、一部APIの変更が必要。
+	注意点
+		インストールする順番
+			4.0インストール後、1.0はインストールができない。先に1.0をインストールが必要。
+
+refer
+	.NET Framework
+		http://ja.wikipedia.org/wiki/.NET_Framework
+	.NET Frameworkのバージョンを整理する
+		http://www.atmarkit.co.jp/ait/articles/1211/16/news093.html
+	各Windows OSでの.NET Frameworkのサポート終了時期を知る
+		http://www.atmarkit.co.jp/ait/articles/1503/04/news141.html
+	.NET Framework 4.5と下位バージョンの互換性がカオス
+		http://freesoft.tvbok.com/tips/os/net_framework_45.html
+
+
+================================================================================
+DLLパス
+
+.NET版とVC++版等とで異なる。
+
+VC++版等
+	
+
+.NET版
+	検索パス
+		exeと同じフォルダ
+		グローバルアセンブリキャッシュ(GAC)
+		拡張
+			probing
+				アプリケーション構成ファイル(app.config)に指定されたサブフォルダパスを指定
+				厳密名を持つ/持たないに関係なくロード可能
+			codebase
+				アプリケーション構成ファイル(app.config)に指定されたフォルダパスを絶対パスで指定。相対パスは不可。
+				厳密名を持つものだけロード可能。持たないものはロード不可
+				特定のアセンブリを指定場所からダウンロードして使用する用途
+			developmentMode
+				環境変数DEVPATHに設定してあるパスを検索
+				厳密名を持つ/持たないに関係なくロード可能
+				開発用途
+
+グローバルアセンブリキャッシュ(GAC)
+	落とし穴
+		GAC登録対象のDLLが、コードがないサードバーティDLLを使っている場合、不可能。
+
+refer
+	DLLの配置場所を変更する(probing, codebase, developmentMode)Comments
+		http://d.hatena.ne.jp/tekk/20110403/1301829578
+	グローバルアセンブリキャッシュ
+		http://ja.wikipedia.org/wiki/%E3%82%B0%E3%83%AD%E3%83%BC%E3%83%90%E3%83%AB_%E3%82%A2%E3%82%BB%E3%83%B3%E3%83%96%E3%83%AA_%E3%82%AD%E3%83%A3%E3%83%83%E3%82%B7%E3%83%A5
