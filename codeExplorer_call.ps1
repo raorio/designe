@@ -15,7 +15,7 @@ filter GetApplicationWindow($ProcessNames) {
         continue
       }
       $Rect = New-Object RECT
-      Write-Host $app.MainWindowTitle; Write-Host $app.MainWindowHandle
+      #Write-Host $app.MainWindowTitle; Write-Host $app.MainWindowHandle
       [Win32]::GetWindowRect($app.MainWindowHandle, [ref]$Rect) | Out-Null
       SetWindowRect ($app.MainWindowTitle) ($app.locationName) ($app.locationURL) ($app.MainWindowHandle) ($Rect)
     }
@@ -128,18 +128,29 @@ filter GetExplorerWindowRect($ProcessNames, [String]$WindowName, [String]$PathNa
   }
 }
 
+# ExplorerとApplicationが類似(X,Y、Left,Topが異なったり、Rect変更が異なる)の処理なので、まとめる
 filter SetExplorerWindowRect($SetWindowDataArray, $CurrentWindowArray) {
-  Write-Host "SetExplorerWindowRect() start"
+  #Write-Host "SetExplorerWindowRect() start"
   foreach ($CurrentWindow in $CurrentWindowArray) {
     $isDetectChangeEqual = $False
+    $isActiveCurrent = IsActiveWindow ($CurrentWindow)
+    if ($isActiveCurrent -eq $False) {
+      #Write-Host "skip not active windows"; Write-Host $CurrentWindow.Left; Write-Host ", "; Write-Host $CurrentWindow.Top; $CurrentWindow
+      continue
+    }
     foreach ($SetWindowData in $SetWindowDataArray) {
+      $isActiveData = IsActiveData ($SetWindowData)
+      if ($isActiveData -eq $False) {
+        #Write-Host "skip not active data"; Write-Host $SetWindowData.X; Write-Host ", "; Write-Host $SetWindowData.Y; $SetWindowData
+        continue
+      }
       $isEqual = IsEqualExplorerWindow ($SetWindowData) ($CurrentWindow)
       if ($isEqual -eq $True) {
         $isDetectChangeEqual = $True
-        Write-Host "detect equal"; Write-Host $SetWindowData.locationName; Write-Host $CurrentWindow.locationName
+        #Write-Host "detect equal"; Write-Host $SetWindowData.locationName; Write-Host $CurrentWindow.locationName
         ChangeExplorerWindow ($SetWindowData) ($CurrentWindow)
       } else {
-        Write-Host "don't detect equal"; Write-Host $SetWindowData.locationName; Write-Host $CurrentWindow.locationName
+        #Write-Host "don't detect equal"; Write-Host $SetWindowData.locationName; Write-Host $CurrentWindow.locationName
       }
     }
     if ($isDetectChangeEqual -eq $False) {
@@ -149,8 +160,84 @@ filter SetExplorerWindowRect($SetWindowDataArray, $CurrentWindowArray) {
   }
 }
 
+filter IsActiveWindow($CurrentWindow) {
+  # X,Y座標のどちらかが0未満だと最小化か別仮想デスクトップ上と判断
+  if ($CurrentWindow.Left -lt 0) {
+    $False
+    return
+  }
+  if ($CurrentWindow.Top -lt 0) {
+    $False
+    return
+  }
+  $True
+  return
+}
+
+filter SetApplicationWindowRect($SetWindowDataArray, $CurrentWindowArray) {
+  #Write-Host "SetExplorerApplicationRect() start"
+  foreach ($CurrentWindow in $CurrentWindowArray) {
+    #Write-Host "target app name"; Write-Host $CurrentWindow.Name
+    $isDetectChangeEqual = $False
+    $isActiveCurrent = IsActiveApplication ($CurrentWindow)
+    if ($isActiveCurrent -eq $False) {
+      #Write-Host "skip not active windows"; Write-Host $CurrentWindow.Left; Write-Host ", "; Write-Host $CurrentWindow.Top; $CurrentWindow
+      continue
+    }
+    foreach ($SetWindowData in $SetWindowDataArray) {
+      #Write-Host "target data name"; Write-Host $SetWindowData.Name
+      $isActiveData = IsActiveData ($SetWindowData)
+      if ($isActiveData -eq $False) {
+        #Write-Host "skip not active data"; Write-Host $SetWindowData.X; Write-Host ", "; Write-Host $SetWindowData.Y; $SetWindowData
+        continue
+      }
+      $isEqual = IsEqualExplorerWindow ($SetWindowData) ($CurrentWindow)
+      if ($isEqual -eq $True) {
+        $isDetectChangeEqual = $True
+        #Write-Host "detect equal"; Write-Host $SetWindowData.locationName; Write-Host $CurrentWindow.locationName
+        ChangeApplicationWindow ($SetWindowData) ($CurrentWindow)
+      } else {
+        #Write-Host "don't detect equal"; Write-Host $SetWindowData.locationName; Write-Host $CurrentWindow.locationName
+      }
+    }
+    if ($isDetectChangeEqual -eq $False) {
+      # 一致するウィンドウが見つけられなかった
+      # あいまい検索を実行
+      #Write-Host "not detect equal"
+    }
+  }
+}
+
+filter IsActiveApplication($CurrentWindow) {
+  # X,Y座標のどちらかが0未満だと最小化か別仮想デスクトップ上と判断
+  if ($CurrentWindow.X -lt 0) {
+    $False
+    return
+  }
+  if ($CurrentWindow.Y -lt 0) {
+    $False
+    return
+  }
+  $True
+  return
+}
+
+filter IsActiveData($SetWindowData) {
+  # X,Y座標のどちらかが0未満だと最小化か別仮想デスクトップ上と判断
+  if ($SetWindowData.X -lt 0) {
+    $False
+    return
+  }
+  if ($SetWindowData.Y -lt 0) {
+    $False
+    return
+  }
+  $True
+  return
+}
+
 filter IsEqualExplorerWindow($SetWindowData, $CurrentWindow) {
-  Write-Host "IsEqualExplorerWindow() start"; Write-Host "SetWindowData"; Write-Host $SetWindowData; Write-Host "CurrentWindow"; Write-Host $CurrentWindow
+  #Write-Host "IsEqualExplorerWindow() start"; Write-Host "SetWindowData"; Write-Host $SetWindowData; Write-Host "CurrentWindow"; Write-Host $CurrentWindow
   $isEqual = $False
   $isEqualName = $False
   $isEqualLocationName = $False
@@ -167,30 +254,39 @@ filter IsEqualExplorerWindow($SetWindowData, $CurrentWindow) {
   if ($isEqualName -eq $True) {
     if ($isEqualLocationName -eq $True) {
       if ($isEqualLocationURL -eq $True) {
-        Write-Host "equal window"; Write-Host $isEqualName; Write-Host $isEqualLocationName; Write-Host $isEqualLocationURL
+        #Write-Host "equal window"; Write-Host $isEqualName; Write-Host $isEqualLocationName; Write-Host $isEqualLocationURL
         $isEqual = $True
         return $isEqual
       }
     }
   }
-  Write-Host "not equal window"
+  #Write-Host "not equal window"
   return $isEqual
 }
 
 filter ChangeExplorerWindow($SetWindowData, $CurrentWindow) {
-  Write-Host "ChangeExplorerWindow() start"; Write-Host "SetWindowData"; Write-Host $SetWindowData; Write-Host "CurrentWindow"; Write-Host $CurrentWindow
+  #Write-Host "ChangeExplorerWindow() start"; Write-Host "SetWindowData"; Write-Host $SetWindowData; Write-Host "CurrentWindow"; Write-Host $CurrentWindow
   if ($CurrentWindow.Name -eq "Internet Explorer") {
-    [Win32]::MoveWindow($CurrentWindow.HWND, $SetWindowData.X, $SetWindowData.Y, $SetWindowData.Width, $SetWindowData.Height, $true)
+    #Write-Host "change ie size"
+    # サイズが3/2倍になり狂うので、2/3倍する。
+    [Win32]::MoveWindow($CurrentWindow.HWND, $SetWindowData.X / 3 * 2, $SetWindowData.Y / 3 * 2, $SetWindowData.Width / 3 * 2, $SetWindowData.Height / 3 * 2, $true)
+  #} elseif ($CurrentWindow.Name -eq "エクスプローラー") {
   } else {
+    #Write-Host "change explorer size"
     $CurrentWindow.Top = $SetWindowData.Y
     $CurrentWindow.Left = $SetWindowData.X
     $CurrentWindow.Width = $SetWindowData.Width
     $CurrentWindow.Height = $SetWindowData.Height
+  #} else {
+  #  Write-Host "change application size"
+  #  [Win32]::MoveWindow($CurrentWindow.HWND, $SetWindowData.X, $SetWindowData.Y, $SetWindowData.Width, $SetWindowData.Height, $true)
   }
 }
 
-# Helper
-# ------
+filter ChangeApplicationWindow($SetWindowData, $CurrentWindow) {
+  #Write-Host "ChangeExplorerApplication() start"; Write-Host "SetWindowData"; Write-Host $SetWindowData; Write-Host "CurrentWindow"; Write-Host $CurrentWindow
+  [Win32]::MoveWindow([int]$CurrentWindow.HWND, $SetWindowData.X, $SetWindowData.Y, $SetWindowData.Width, $SetWindowData.Height, $true)
+}
 
 filter SetWindowRect($name, $locationName, $locationURL, $HWND, $rc) {
   $WindowRect = New-Object WINDOW_RECT
@@ -207,14 +303,19 @@ filter SetWindowRect($name, $locationName, $locationURL, $HWND, $rc) {
   $WindowRect
 }
 
-# C#
-# --
+######
+# C# #
+######
 
 Add-Type @"
   using System;
   using System.Runtime.InteropServices;
   
   public class Win32 {
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static extern bool MoveWindow(IntPtr hwhd, int X, int Y, int nWidth, int nHeight, bool bRepaint);
+    
     [DllImport("user32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]
     public static extern bool GetWindowRect(IntPtr hwhd, out RECT lpRect);
@@ -239,33 +340,76 @@ Add-Type @"
   }
 "@
 
-$rect = $null
-# IEは、タブが複数ある場合、サイズ変更できない。MoveWindowで実施する。
-$ProcessNames = @("エクスプローラー", "Internet Explorer")
-#$ProcessNames = @("エクスプローラー")
-Write-Host "ProcessNames: "; Write-Host $ProcessNames
-foreach($ProcessName in $ProcessNames) {
-  Write-Host "ProcessName: "; Write-Host $ProcessName
+########
+# test #
+########
+
+Param(
+  [string]$Arg1 = $PSScriptRoot
+)
+$CurrentDirectory = $PSScriptRoot
+#Write-Host $Arg1
+#Split-Path $MyInvocation.MyCommand.Path
+#$MyInvocation.MyCommand.Name
+$FilePath = "$CurrentDirectory" + ".\explorer_windows.csv"
+
+$Export = $True
+$Inport = $False
+#$Export = $False
+#$Inport = $True
+
+if ($Export -eq $True) {
+  $rect = $null
+  # IEは、タブが複数ある場合、サイズ変更できない。MoveWindowで実施する。
+  $ProcessNames = @("エクスプローラー", "Internet Explorer")
+  #$ProcessNames = @("エクスプローラー")
+  Write-Host "ProcessNames: "; Write-Host $ProcessNames
+  foreach($ProcessName in $ProcessNames) {
+    Write-Host "ProcessName: "; Write-Host $ProcessName
+  }
+  $WindowName = ""
+  #$WindowName = "*"
+  #$WindowName = "PS"
+  #$WindowName = "psChangeWH"
+  #Write-Host "WindowName: "; Write-Host $WindowName
+  $PathName = ""
+  #Write-Host "PathName: "; Write-Host $PathName
+
+  GetExplorerWindowRect ($ProcessNames) ($WindowName) ($PathName) | Set-Variable GetWindowsDataArray
+  #Write-Host "GetWindowsDataArray: "; Write-Host $GetWindowsDataArray; $GetWindowsDataArray
+
+  $appProcessName = @("*")
+  GetApplicationWindow ($appProcessName) | Set-Variable GetApplicationDataArray
+  #Write-Host "GetApplicationDataArray: "; Write-Host $GetApplicationDataArray; $GetApplicationDataArray
+
+  if ($GetWindowsDataArray.GetType().Name -ne "Object[]") {
+    if ($GetApplicationDataArray.GetType().Name -ne "Object[]") {
+      $GetWindowsApplicationDataArray = @($GetWindowsDataArray, $GetApplicationDataArray)
+    } else {
+      $GetWindowsApplicationDataArray = @($GetWindowsDataArray) + $GetApplicationDataArray
+    }
+  } else {
+    if ($GetApplicationDataArray.GetType().Name -ne "Object[]") {
+      $GetWindowsApplicationDataArray = $GetWindowsDataArray + @($GetApplicationDataArray)
+    } else {
+      $GetWindowsApplicationDataArray = $GetWindowsDataArray + $GetApplicationDataArray
+    }
+  }
+  #Write-Host "GetWindowsApplicationDataArray: "; Write-Host $GetWindowsApplicationDataArray; $GetWindowsApplicationDataArray
+
+  ExportCSV ($GetWindowsApplicationDataArray) $FilePath
 }
-$WindowName = ""
-#$WindowName = "*"
-#$WindowName = "PS"
-#$WindowName = "psChangeWH"
-Write-Host "WindowName: "; Write-Host $WindowName
-$PathName = ""
-Write-Host "PathName: "; Write-Host $PathName
 
-GetExplorerWindowRect ($ProcessNames) ($WindowName) ($PathName) | Set-Variable GetWindowsDataArray
-Write-Host "GetWindowsDataArray: "; Write-Host $GetWindowsDataArray
+if ($Inport -eq $True) {
+  ImportCSV ($FilePath) | Set-Variable LoadWindowsApplicationDataArray
+  #Write-Host "LoadWindowsApplicationDataArray: "; Write-Host $LoadWindowsApplicationDataArray; $LoadWindowsApplicationDataArray
 
-$FilePath = ".\explorer_windows.csv"
-ExportCSV ($GetWindowsDataArray) $FilePath
+  $CurrentWindows = GetExplorerWindowEachFilter ($ProcessNames)
+  #Write-Host "CurrentWindows"; Write-Host $CurrentWindows; $CurrentWindows
+  SetExplorerWindowRect ($LoadWindowsApplicationDataArray) ($CurrentWindows)
 
-ImportCSV ($FilePath) | Set-Variable LoadWindowsDataArray
-Write-Host "LoadWindowsDataArray: "; Write-Host $LoadWindowsDataArray; $LoadWindowsDataArray
-
-$CurrentWindows = GetExplorerWindowEachFilter ($ProcessNames)
-Write-Host "CurrentWindows"; Write-Host $CurrentWindows; $CurrentWindows
-SetExplorerWindowRect ($LoadWindowsDataArray) ($CurrentWindows)
-
-# IEのサイズ変更が、指定より大きくなる。メニュー等のサイズ分大きくなっている可能性有
+  $appProcessName = @("*")
+  GetApplicationWindow ($appProcessName) | Set-Variable GetApplicationDataArray
+  #Write-Host "GetApplicationDataArray: "; Write-Host $GetApplicationDataArray; $GetApplicationDataArray
+  SetApplicationWindowRect ($LoadWindowsApplicationDataArray) ($GetApplicationDataArray)
+}
